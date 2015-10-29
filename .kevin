@@ -1,21 +1,20 @@
-# example kevin file
+# kevin-ci example control file
 
 tamale:
-	- env: STUFF="hot hot"
-	sleep 4
-	echo do you like tamale?
-	echo $STUFF tamale?
-	sleep 2
+	echo "do you like tamale?"
+	sleep 20
+	echo "hot, hot tamale?"
+	python -c "import sys; exit(not True == sys.stdout.isatty())"
 
-sudo: tamale
+answer: tamale
+	- env: answer="42"
+	python3 -c 'import os; exit(not os.environ["answer"] == "42")'
+
+silentcheck:
 	- hidden
-	sudo echo gschicht
-	return $?
+	test -r /etc/passwd
+	sudo whoami
 
-cpuinfo: sudo tamale
-	echo awsum vm:
-	cat /proc/cpuinfo
-
-great_success: cpuinfo
+great_success: answer silentcheck
 	echo "raus raus raus, die nyan-katze"
 	return 0
