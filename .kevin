@@ -1,8 +1,11 @@
 # kevin-ci example control file
 
 tamale:
+	- output: wtf
+	mkdir wtf
+	touch wtf/asdf wtf/stuff
 	echo "do you like tamale?"
-	sleep 20
+	sleep 5
 	echo "hot, hot tamale?"
 	python -c "import sys; exit(not True == sys.stdout.isatty())"
 
@@ -13,8 +16,9 @@ answer: tamale
 silentcheck:
 	- hidden
 	test -r /etc/passwd
-	sudo whoami
+	whoami
 
 great_success: answer silentcheck
-	echo "raus raus raus, die nyan-katze"
-	return 0
+	- output: test
+	echo "raus raus raus, die nyan-katze" > test
+	echo "stuff."
