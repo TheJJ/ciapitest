@@ -5,7 +5,7 @@ tamale:
 	mkdir wtf
 	touch wtf/asdf wtf/stuff
 	echo "do you like tamale?"
-	sleep 5
+	sleep 1
 	echo "hot, hot tamale?"
 	python -c "import sys; exit(not True == sys.stdout.isatty())"
 
@@ -21,4 +21,5 @@ silentcheck:
 great_success: answer silentcheck
 	- output: test
 	echo "raus raus raus, die nyan-katze" > test
-	echo "stuff."
+	echo "cya!"
+	python3 -c '[print("lol asdf wtf %d" % i) for i in range(1024 * 3)]'
