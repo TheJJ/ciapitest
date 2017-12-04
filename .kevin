@@ -1,25 +1,56 @@
-# kevin-ci example control file
+# example control file
+# syntax similar to makefiles
+
+# * each step can depend on other steps
+# * it can have optional settings like cwd or env variables
+# * the step consists of one or more commands
+# * after all commands of a step, output files can be saved
+#
+# EXAMPLE:
+#
+# stepname: other-stepname other-stepname-that-must-suceed-before bla bla
+#     - optional rule setup stuff, e.g.:
+#     - env: variable=value mom="really fat"  # set environment variables
+#     - hidden                                # hide that rule from all output
+#     - skip                                  # skip this step
+#     - skip  (? if job == "some_jobname" ?)  # skip only if jobname matches
+#     - output: "some/file/thats/copied/out/to/static/output/folder"
+#     - output: "or/some/directory/to/send/"
+#     - cwd: "~/dir/to/run/the/commands/in/"
+#
+#     # then, the step commands follow:
+#     echo "some command executed in sh"
+#     echo "if one command fails, the step will fail"
+#     echo "it fails when returncode != 0"
+#
+#     cd somewhere/ && echo "each line is in its own shell!"
+#     echo "so the following command is no longer in 'somewhere/'"
+
+# the steps are executed in order.
+# any step with no more pending dependencies is executed.
+# if multiple are ready, the first in the order will be run first.
 
 tamale:
-	- output: wtf
-	mkdir wtf
-	touch wtf/asdf wtf/stuff
+	- env: STUFF="hot hot"
 	echo "do you like tamale?"
 	sleep 1
-	echo "hot, hot tamale?"
-	python -c "import sys; exit(not True == sys.stdout.isatty())"
+	echo "$STUFF tamale?"
+	sleep 2
 
-answer: tamale
-	- env: answer="42"
-	python3 -c 'import os; exit(not os.environ["answer"] == "42")'
-
-silentcheck:
+sudo:
 	- hidden
-	test -r /etc/passwd
-	whoami
+	sudo echo "i got root!"
+	echo "running on whitespaceOS"  (? if job == "whitespaceOS" ?)
 
-great_success: answer silentcheck
-	- output: test
-	echo "raus raus raus, die nyan-katze" > test
-	echo "cya!"
-	python3 -c '[print("lol asdf wtf %d" % i) for i in range(1024 * 3)]'
+cpuinfo: tamale sudo
+	- cwd: "/tmp"
+	- output: "some/file/thats/copied/out/to/static/output/folder"
+	ls
+	pwd
+	echo awsum vm:
+	cat /proc/cpuinfo
+
+great_success: cpuinfo
+	echo "raus raus raus, die nyan-katze"
+
+	echo "now, copy this file in your project and modify it!"
